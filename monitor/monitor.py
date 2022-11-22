@@ -27,19 +27,19 @@ config=[]
 def get_mean(dict_val):
     raw = [i[1] for i in dict_val]
     cpu = [i[-1] for i in dict_val]
-    mean_raw = sum(raw)/len(dict_val)
+    mean_ram = sum(ram)/len(dict_val)
     mean_cpu = sum(cpu)/len(dict_val)
-    return mean_raw, mean_cpu
+    return mean_ram, mean_cpu
 def plot_img(dict_val, time, num_process):
-    mean_raw_list = []
+    mean_ram_list = []
     mean_cpu_list = []
     for id in range(num_process):
         fig, axs = plt.subplots(2)
         x = [i for i in range(len(dict_val[id]))]
         raw = [i[1] for i in dict_val[id]]
         cpu = [i[-1] for i in dict_val[id]]
-        mean_raw, mean_cpu = get_mean(dict_val[id])
-        mean_raw_list.append(mean_raw)
+        mean_ram, mean_cpu = get_mean(dict_val[id])
+        mean_ram_list.append(mean_ram)
         mean_cpu_list.append(mean_cpu)
         
         plt.suptitle("{}th: RAM: {:.2f} KB | CPU(%): {:.4f} | Time: {:.4f}(ms)".format(id+1,mean_raw, mean_cpu, time[id]))
@@ -60,8 +60,8 @@ def main():
     data_, dict_val, time, num_proc=read_txt("/home/quanh/Documents/quanh/process_syn/data.txt")
     # plot_img(dict_val, time, num_proc)    
     for i in range(num_proc):
-        mean_raw, mean_cpu = get_mean(dict_val[i])
-        config.append([mean_raw, mean_cpu, 0])
+        mean_ram, mean_cpu = get_mean(dict_val[i])
+        config.append([mean_ram, mean_cpu, 0])
     config.append([sum(data_[:,1])/data_.shape[0], sum(data_[:,-1])/data_.shape[0],sum(time)/len(time)])
     config = pd.DataFrame(config, columns =['RAM','CPU','Time'])
     config.to_csv('results.csv', index=False)
